@@ -1,0 +1,117 @@
+/* ============================================================
+   DESIGN TOKENS — "movie theatre" palette
+   Dark background = the theatre. Amber = projector light.
+   Muted red = the record-light tag. Not generic dark-mode neon
+   — every color choice ties back to the cinema metaphor.
+   ============================================================ */
+:root {
+  --bg:      #0E0E10;   /* theatre dark, not pure black */
+  --card:    #17171A;
+  --ink:     #F2EFE9;   /* warm off-white, like projector-lit screen */
+  --muted:   #9A968D;
+  --line:    #2A2A2E;
+  --gold:    #D4A657;   /* projector-light amber, primary accent */
+  --rec:     #B0473A;   /* muted "recording" red, used sparingly */
+  --max-width: 900px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.65;
+}
+
+.wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+.mono { font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.08em; }
+
+/* ---------- NAV ---------- */
+header {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(14,14,16,0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+nav.wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px;
+}
+.brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 0.04em;
+  color: var(--ink); text-decoration: none;
+}
+.navlinks a {
+  color: var(--muted); text-decoration: none;
+  font-size: 13px; margin-left: 26px;
+  transition: color 0.15s ease;
+}
+.navlinks a:hover { color: var(--gold); }
+@media (max-width: 700px) { .navlinks { display: none; } }
+
+.rec-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; color: var(--rec);
+  border: 1px solid var(--rec); border-radius: 999px;
+  padding: 4px 10px;
+}
+
+/* ---------- HERO / TITLE CARD ---------- */
+#hero {
+  max-width: var(--max-width); margin: 0 auto; padding: 120px 24px 90px;
+  text-align: center;
+}
+.presents {
+  display: block; color: var(--muted); font-size: 12px; margin-bottom: 22px;
+}
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 9vw, 96px);
+  line-height: 0.98; letter-spacing: 0.02em;
+  color: var(--ink); margin-bottom: 26px;
+}
+.limelight { font-family: 'Limelight', cursive; }
+.tagline {
+  color: var(--muted); font-size: 17px; max-width: 46ch;
+  margin: 0 auto 30px;
+}
+.runtime { display: block; color: var(--gold); font-size: 11px; }
+
+/* ---------- SECTIONS ---------- */
+section { max-width: var(--max-width); margin: 0 auto; padding: 80px 24px; border-top: 1px solid var(--line); }
+.reel-label { display: block; color: var(--gold); font-size: 11px; margin-bottom: 14px; }
+h2 {
+  font-family: 'Bebas Neue', sans-serif; font-size: 34px;
+  letter-spacing: 0.01em; margin-bottom: 22px;
+}
+.about-text { color: var(--muted); font-size: 16px; max-width: 62ch; }
+
+/* ---------- REEL CARDS ---------- */
+.reel {
+  background: var(--card); border: 1px solid var(--line); border-left: 3px solid var(--gold);
+  border-radius: 6px; padding: 26px 28px; margin-bottom: 18px;
+  transition: border-color 0.15s ease;
+}
+.reel.placeholder { border-left-color: var(--line); opacity: 0.6; }
+.reel-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 10px; }
+.reel-num { color: var(--gold); font-size: 12px; }
+.reel h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.01em; color: var(--ink); }
+.reel p { color: var(--muted); font-size: 15px; max-width: 64ch; }
+.reel p.tbd { font-style: italic; }
+.tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.tags span {
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 5px; padding: 3px 8px;
+}
+
+/* ---------- CREDITS / FOOTER ---------- */
+footer {
+  max-width: var(--max-width); margin: 0 auto; padding: 80px 24px 60px;
+  border-top: 1px solid var(--line); text-align: center;
+}
+.credits-row { display: flex; justify-content: center; gap: 24px; margin: 22px 0 30px; flex-wrap: wrap; }
+.credits-row a { color: var(--gold); text-decoration: none; font-size: 15px; }
+.credits-row a:hover { text-decoration: underline; }
+.fine { display: block; color: var(--muted); font-size: 11px; }
