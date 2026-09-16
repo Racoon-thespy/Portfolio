@@ -23,6 +23,11 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+/* Without this, trying to scroll past the very top (hero) or very
+   bottom (contact) of the document triggers the browser's native
+   rubber-band/overscroll bounce — a bit of vertical wobble on exactly
+   the two panels that are meant to be static. */
+html, body { overscroll-behavior-y: none; }
 body {
   background: var(--bg);
   color: var(--ink);
