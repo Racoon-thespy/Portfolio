@@ -60,6 +60,7 @@ const hScroll = document.querySelector('.h-scroll');
 const hStage = document.querySelector('.h-stage');
 const hTrack = document.querySelector('.h-track');
 const hPanels = Array.from(document.querySelectorAll('.h-panel'));
+const hPanelContents = hPanels.map((p) => p.firstElementChild);
 
 const scrubberFill = document.querySelector('.scrubber-fill');
 const scrubberHead = document.querySelector('.scrubber-playhead');
@@ -69,13 +70,45 @@ let hScrollActive = false;
 
 // Cached layout metrics, in absolute page-space. Recomputed only by
 // measure(), never inside tick().
-const metrics = { scrollStartY: 0, totalScrollable: 1, maxTranslate: 0 };
+//
+// A panel isn't always exactly one viewport tall (filmography has more
+// "reels" than fit on screen). So each panel gets its own timeline slot:
+// first `overflow[i]` px of scroll reveal the rest of its content in
+// place (translateY), THEN `vh` px slide the whole track sideways into
+// the next panel. Previously the tall panel had its own native
+// `overflow-y: auto`, so a wheel scroll would get captured by that
+// inner scroll box instead of advancing the outer (horizontal) one —
+// that fight between two independent scroll containers was the jank.
+// Driving both axes off one `scrollY` reading removes that fight.
+const metrics = {
+  scrollStartY: 0,
+  totalScrollable: 1,
+  vh: 0,
+  stageWidth: 0,
+  panelStart: [],
+  overflow: [],
+  transitionStart: [],
+};
 
 function measure() {
   if (!hScroll || !hStage || !hTrack) return;
   metrics.scrollStartY = hScroll.getBoundingClientRect().top + window.scrollY;
-  metrics.totalScrollable = Math.max(1, hScroll.offsetHeight - hStage.offsetHeight);
-  metrics.maxTranslate = Math.max(0, hTrack.scrollWidth - hStage.offsetWidth);
+  metrics.vh = hStage.offsetHeight;
+  metrics.stageWidth = hStage.offsetWidth;
+
+  let cursor = 0;
+  const lastIndex = hPanelContents.length - 1;
+  hPanelContents.forEach((content, i) => {
+    metrics.panelStart[i] = cursor;
+    const overflow = hScrollActive ? Math.max(0, content.scrollHeight - metrics.vh) : 0;
+    metrics.overflow[i] = overflow;
+    cursor += overflow;
+    metrics.transitionStart[i] = cursor;
+    if (i < lastIndex) cursor += metrics.vh;
+  });
+  metrics.totalScrollable = Math.max(1, cursor);
+
+  hScroll.style.height = hScrollActive ? (metrics.totalScrollable + metrics.vh) + 'px' : '';
 }
 
 function evaluateHScrollMode() {
@@ -88,7 +121,10 @@ function evaluateHScrollMode() {
   if (shouldActivate === hScrollActive) return;
   hScrollActive = shouldActivate;
   document.documentElement.classList.toggle('h-scroll-active', hScrollActive);
-  if (!hScrollActive && hTrack) hTrack.style.transform = '';
+  if (!hScrollActive) {
+    if (hTrack) hTrack.style.transform = '';
+    hPanelContents.forEach((c) => { c.style.transform = ''; });
+  }
   measure(); // geometry just changed (h-scroll's height depends on this class)
 }
 
@@ -106,8 +142,18 @@ function tick() {
 
   if (hScrollActive) {
     const scrolled = Math.min(Math.max(scrollY - metrics.scrollStartY, 0), metrics.totalScrollable);
-    const progress = scrolled / metrics.totalScrollable;
-    hTrack.style.transform = `translate3d(${(-progress * metrics.maxTranslate).toFixed(1)}px, 0, 0)`;
+    const lastIndex = hPanelContents.length - 1;
+    let hProgress = 0;
+
+    hPanelContents.forEach((content, i) => {
+      const reveal = Math.min(Math.max(scrolled - metrics.panelStart[i], 0), metrics.overflow[i]);
+      content.style.transform = reveal ? `translate3d(0, ${(-reveal).toFixed(1)}px, 0)` : '';
+      if (i < lastIndex) {
+        hProgress += Math.min(Math.max((scrolled - metrics.transitionStart[i]) / metrics.vh, 0), 1);
+      }
+    });
+
+    hTrack.style.transform = `translate3d(${(-hProgress * metrics.stageWidth).toFixed(1)}px, 0, 0)`;
   }
 
   if (scrubberFill && scrubberHead) {
@@ -145,9 +191,8 @@ if (hScroll && hStage && hTrack && hPanels.length) {
       if (!panel) return;
       e.preventDefault();
       const index = hPanels.indexOf(panel);
-      const progress = hPanels.length > 1 ? index / (hPanels.length - 1) : 0;
       window.scrollTo({
-        top: metrics.scrollStartY + progress * metrics.totalScrollable,
+        top: metrics.scrollStartY + metrics.panelStart[index],
         behavior: 'smooth',
       });
     });

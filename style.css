@@ -118,7 +118,8 @@ body {
    normal vertical stack (the plain section/footer rules below)
    is what renders.
    ============================================================ */
-html.h-scroll-active .h-scroll { height: 400vh; }
+/* Height is set inline by JS (measure()) once it knows how much extra
+   scroll each panel's own content needs — see script.js. */
 html.h-scroll-active .h-stage {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
 }
@@ -128,8 +129,12 @@ html.h-scroll-active .h-track {
 }
 html.h-scroll-active .h-panel {
   flex: 0 0 100vw; width: 100vw; height: 100%;
-  overflow-y: auto; -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   display: flex; justify-content: center; align-items: flex-start;
+}
+html.h-scroll-active .h-panel > section,
+html.h-scroll-active .h-panel > footer {
+  will-change: transform;
 }
 html.h-scroll-active .h-panel section,
 html.h-scroll-active .h-panel footer { border-top: none; }
