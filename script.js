@@ -62,6 +62,13 @@ const hTrack = document.querySelector('.h-track');
 const hPanels = Array.from(document.querySelectorAll('.h-panel'));
 const hPanelContents = hPanels.map((p) => p.firstElementChild);
 
+// The filmography panel reveals its extra "reels" sideways (a
+// filmstrip) instead of upward like every other panel's overflow —
+// same scroll-timeline slot, different axis/target.
+const reelStrip = document.querySelector('.reel-strip');
+const reelTrack = document.querySelector('.reel-track');
+const filmographyIndex = hPanels.findIndex((p) => p.dataset.panel === 'filmography');
+
 const scrubberFill = document.querySelector('.scrubber-fill');
 const scrubberHead = document.querySelector('.scrubber-playhead');
 
@@ -100,7 +107,12 @@ function measure() {
   const lastIndex = hPanelContents.length - 1;
   hPanelContents.forEach((content, i) => {
     metrics.panelStart[i] = cursor;
-    const overflow = hScrollActive ? Math.max(0, content.scrollHeight - metrics.vh) : 0;
+    let overflow = 0;
+    if (hScrollActive) {
+      overflow = (i === filmographyIndex && reelStrip && reelTrack)
+        ? Math.max(0, reelTrack.scrollWidth - reelStrip.clientWidth)
+        : Math.max(0, content.scrollHeight - metrics.vh);
+    }
     metrics.overflow[i] = overflow;
     cursor += overflow;
     metrics.transitionStart[i] = cursor;
@@ -124,6 +136,7 @@ function evaluateHScrollMode() {
   if (!hScrollActive) {
     if (hTrack) hTrack.style.transform = '';
     hPanelContents.forEach((c) => { c.style.transform = ''; });
+    if (reelTrack) reelTrack.style.transform = '';
   }
   measure(); // geometry just changed (h-scroll's height depends on this class)
 }
@@ -147,7 +160,11 @@ function tick() {
 
     hPanelContents.forEach((content, i) => {
       const reveal = Math.min(Math.max(scrolled - metrics.panelStart[i], 0), metrics.overflow[i]);
-      content.style.transform = reveal ? `translate3d(0, ${(-reveal).toFixed(1)}px, 0)` : '';
+      if (i === filmographyIndex && reelTrack) {
+        reelTrack.style.transform = reveal ? `translate3d(${(-reveal).toFixed(1)}px, 0, 0)` : '';
+      } else {
+        content.style.transform = reveal ? `translate3d(0, ${(-reveal).toFixed(1)}px, 0)` : '';
+      }
       if (i < lastIndex) {
         hProgress += Math.min(Math.max((scrolled - metrics.transitionStart[i]) / metrics.vh, 0), 1);
       }
@@ -230,42 +247,3 @@ if (scrubberLabels.length && trackedSections.length) {
   trackedSections.forEach((section) => sectionObserver.observe(section));
 }
 
-// ============================================================
-// REEL FILMSTRIP — drag-to-scroll + vertical-wheel redirect
-// ------------------------------------------------------------
-// The strip only overflows horizontally, so a mouse wheel (unlike a
-// trackpad's two-finger swipe) won't move it on its own. Redirect
-// vertical wheel delta into horizontal scroll while hovering it, but
-// only mid-strip — at either end, let the event through unmodified
-// so the page's own scroll (and the horizontal-panel track above)
-// keeps working exactly as it would without the strip.
-// ============================================================
-document.querySelectorAll('.reel-strip').forEach((strip) => {
-  strip.addEventListener('wheel', (e) => {
-    const atStart = strip.scrollLeft <= 0;
-    const atEnd = strip.scrollLeft >= strip.scrollWidth - strip.clientWidth - 1;
-    const scrollingForward = e.deltaY > 0;
-    if ((scrollingForward && atEnd) || (!scrollingForward && atStart)) return;
-    e.preventDefault();
-    strip.scrollLeft += e.deltaY;
-  }, { passive: false });
-
-  let dragging = false;
-  let startX = 0;
-  let startScroll = 0;
-  strip.addEventListener('pointerdown', (e) => {
-    if (e.pointerType !== 'mouse') return;
-    dragging = true;
-    startX = e.clientX;
-    startScroll = strip.scrollLeft;
-    strip.classList.add('dragging');
-  });
-  window.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    strip.scrollLeft = startScroll - (e.clientX - startX);
-  });
-  window.addEventListener('pointerup', () => {
-    dragging = false;
-    strip.classList.remove('dragging');
-  });
-});
