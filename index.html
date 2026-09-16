@@ -5,118 +5,176 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aditya Pratap Singh - Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Limelight&family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- Ambient CRT overlay: grain, scanlines, vignette, flicker -->
+  <div class="crt-layer" aria-hidden="true">
+    <div class="crt-grain"></div>
+    <div class="crt-scanlines"></div>
+    <div class="crt-glow-top"></div>
+    <div class="crt-vignette"></div>
+    <div class="crt-flicker"></div>
+  </div>
+  <div class="crt-drift-layer" aria-hidden="true">
+    <div class="crt-drift"></div>
+  </div>
+
   <header>
     <nav class="wrap">
       <a href="#top" class="brand">A.P.S.</a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
       <div class="navlinks">
         <a href="#about">Director's Statement</a>
         <a href="#filmography">Filmography</a>
         <a href="#contact">Contact</a>
       </div>
-      <span class="rec-tag">● NOW SHOWING</span>
+      <span class="rec-tag mono"><span class="dot"></span>REC</span>
     </nav>
   </header>
 
-  <main id="top">
+  <main id="top" class="h-scroll">
+   <div class="h-stage">
+    <div class="h-track">
 
     <!-- TITLE CARD / HERO -->
+    <div class="h-panel" data-panel="hero">
     <section id="hero">
-      <span class="mono presents">ADITYA Pratap SINGH PRESENTS</span>
-      <h1>Absolute<br><span class="limelight">CINEMA</span></h1>
-      <p class="tagline">Dev&nbsp; AI/ML&nbsp; Photography&nbsp; Writing&nbsp; Cinematography&nbsp; Music</p>
-      <span class="mono runtime">RUNTIME: 22 Years &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RATED: IMDb 🌟10</span>
+      <div class="hero-frame viewfinder">
+        <svg class="play-mark" aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M 0 1.003 C -0.001 0.642 0.193 0.308 0.507 0.13 C 0.822 -0.048 1.208 -0.043 1.517 0.144 L 6.514 3.141 C 6.817 3.321 7.002 3.648 7.002 4 C 7.002 4.352 6.817 4.679 6.514 4.859 L 1.517 7.856 C 1.208 8.043 0.821 8.048 0.507 7.87 C 0.192 7.692 -0.001 7.358 0 6.996 Z" fill="transparent" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" transform="translate(9 8)"></path>
+          <path d="M 0 10 C 0 4.477 4.477 0 10 0 C 15.523 0 20 4.477 20 10 C 20 15.523 15.523 20 10 20 C 4.477 20 0 15.523 0 10 Z" fill="transparent" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" transform="translate(2 2)"></path>
+        </svg>
+        <span class="mono presents">ADITYA Pratap SINGH PRESENTS</span>
+        <h1>Absolute<br><span class="hero-accent">CINEMA</span></h1>
+        <p class="tagline">Dev&nbsp; AI/ML&nbsp; Photography&nbsp; Writing&nbsp; Cinematography&nbsp; Music</p>
+        <div class="stats mono">
+          <div class="stat"><span class="stat-num">22</span><span class="stat-label">Years Runtime</span></div>
+          <div class="stat"><span class="stat-num">07</span><span class="stat-label">Reels Shot</span></div>
+          <div class="stat"><span class="stat-num">10</span><span class="stat-label">IMDb Rating</span></div>
+        </div>
+      </div>
     </section>
+    </div>
 
     <!-- DIRECTOR'S STATEMENT -->
+    <div class="h-panel" data-panel="about">
     <section id="about">
       <span class="reel-label mono">DIRECTOR'S STATEMENT</span>
       <h2>Think logical, Paint Visceral</h2>
       <p class="about-text">Hi, this is me, Aditya and this is a little walk through my life, a gallery of whatever my eyes have seen, whatever my heart has felt, and whatever my mind has created. Come aboard viewer, go through this cinematic journey, one that would hopefully make your pockets lighter &#128541 and mine heavier, but trust me, its going to be ABSOLUTE CINEMA!! </p>
     </section>
+    </div>
 
     <!-- FILMOGRAPHY -->
+    <div class="h-panel" data-panel="filmography">
     <section id="filmography">
-      
+
       <h2>Titles</h2>
 
-      <article class="reel">
+      <article class="reel viewfinder">
         <div class="reel-head">
           <span class="reel-num mono">REEL 01</span>
+          <span class="timecode mono">00:00</span>
           <h3>Development</h3>
         </div>
         <p>Empty repositories and empty timelines, ready to be built from scratch, each frame fabricated from zero till it becomes a masterpiece.</p>
         <div class="tags"><span>Python</span><span>FastAPI</span><span>System Design</span><span>React</span><span>PostgreSQL</span><span>Docker</span></div>
       </article>
 
-      <article class="reel">
+      <article class="reel viewfinder">
         <div class="reel-head">
           <span class="reel-num mono">REEL 02</span>
+          <span class="timecode mono">00:42</span>
           <h3>Quality Assurance</h3>
         </div>
         <p>No shot misplaced, every frame is ensured to be put precisely where it is supposed to be.</p>
         <div class="tags"><span>Automation</span><span>Observability</span><span>Composeproof</span><span>Maestro</span><span>Pytest</span><span>Mixpanel</span></div>
       </article>
 
-      <article class="reel">
+      <article class="reel viewfinder">
         <div class="reel-head">
           <span class="reel-num mono">REEL 03</span>
+          <span class="timecode mono">01:18</span>
           <h3>AI / ML</h3>
         </div>
-        <p></p>
+        <p>In the fearful age of HAL 9000 and Skynet, lets build TARS and Baymax.</p>
         <div class="tags"><span>LangGraph</span><span>RAG</span><span>PyTorch</span><span>Google ADK</span><span>AI Agents</span><span>Multi-Agent Systems</span></div>
       </article>
 
-      <article class="reel placeholder">
+      <article class="reel placeholder viewfinder">
         <div class="reel-head">
           <span class="reel-num mono">REEL 04</span>
+          <span class="timecode mono">02:05</span>
           <h3>Photography</h3>
         </div>
         <p class="tbd">Coming soon — this reel is still in the darkroom.</p>
       </article>
 
-      <article class="reel placeholder">
+      <article class="reel placeholder viewfinder">
         <div class="reel-head">
           <span class="reel-num mono">REEL 05</span>
+          <span class="timecode mono">02:40</span>
           <h3>Writing</h3>
         </div>
         <p class="tbd">Coming soon — drafts in progress.</p>
       </article>
 
-      <article class="reel placeholder">
+      <article class="reel placeholder viewfinder">
         <div class="reel-head">
           <span class="reel-num mono">REEL 06</span>
+          <span class="timecode mono">03:15</span>
           <h3>Videography &amp; Cinematography</h3>
         </div>
         <p class="tbd">Coming soon — footage being logged.</p>
       </article>
 
-      <article class="reel placeholder">
+      <article class="reel placeholder viewfinder">
         <div class="reel-head">
           <span class="reel-num mono">REEL 07</span>
+          <span class="timecode mono">03:50</span>
           <h3>Music</h3>
         </div>
         <p class="tbd">Coming soon — still tuning.</p>
       </article>
     </section>
+    </div>
 
+    <!-- CREDITS ROLL -->
+    <div class="h-panel" data-panel="contact">
+    <footer id="contact" role="contentinfo">
+      <span class="reel-label mono">END CREDITS</span>
+      <h2>Get in touch</h2>
+      <div class="credits-row">
+        <a href="mailto:pratapsinghaditya82@gmail.com">pratapsinghaditya82@gmail.com</a>
+        <a href="https://linkedin.com/in/aditya-pratap-singh67" target="_blank" rel="noopener">LinkedIn<svg class="ext-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M 0 0 L 14 0" fill="transparent" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" transform="translate(5 12)"></path><path d="M 0 0 L 7 7 L 0 14" fill="transparent" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" transform="translate(12 5)"></path></svg></a>
+        <a href="https://github.com/Racoon-thespy" target="_blank" rel="noopener">GitHub<svg class="ext-icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M 0 0 L 14 0" fill="transparent" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" transform="translate(5 12)"></path><path d="M 0 0 L 7 7 L 0 14" fill="transparent" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" transform="translate(12 5)"></path></svg></a>
+      </div>
+      <span class="mono fine">DIRECTED, EDITED, AND DEBUGGED BY A. PRATAP SINGH</span>
+    </footer>
+    </div>
+
+    </div>
+   </div>
   </main>
 
-  <!-- CREDITS ROLL -->
-  <footer id="contact">
-    <span class="reel-label mono">END CREDITS</span>
-    <h2>Get in touch</h2>
-    <div class="credits-row">
-      <a href="mailto:pratapsinghaditya82@gmail.com">pratapsinghaditya82@gmail.com</a>
-      <a href="https://linkedin.com/in/aditya-pratap-singh67" target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://github.com/Racoon-thespy" target="_blank" rel="noopener">GitHub</a>
+  <!-- Fixed timeline scrubber: scroll-progress bar + section nav -->
+  <div class="scrubber" aria-hidden="false">
+    <div class="scrubber-track">
+      <div class="scrubber-fill"></div>
+      <div class="scrubber-playhead"></div>
     </div>
-    <span class="mono fine">DIRECTED, EDITED, AND DEBUGGED BY A. PRATAP SINGH</span>
-  </footer>
+    <div class="scrubber-labels mono">
+      <a href="#hero" class="current">00 TOP</a>
+      <a href="#about">01 STATEMENT</a>
+      <a href="#filmography">02 TITLES</a>
+      <a href="#contact">03 CREDITS</a>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
