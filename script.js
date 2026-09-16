@@ -108,7 +108,11 @@ function measure() {
   hPanelContents.forEach((content, i) => {
     metrics.panelStart[i] = cursor;
     let overflow = 0;
-    if (hScrollActive) {
+    // Hero and the final (contact) panel should always be static —
+    // no internal reveal-scroll, even if their content runs a little
+    // taller than the viewport on some screens.
+    const isStaticPanel = i === 0 || i === lastIndex;
+    if (hScrollActive && !isStaticPanel) {
       overflow = (i === filmographyIndex && reelStrip && reelTrack)
         ? Math.max(0, reelTrack.scrollWidth - reelStrip.clientWidth)
         : Math.max(0, content.scrollHeight - metrics.vh);

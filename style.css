@@ -138,6 +138,13 @@ html.h-scroll-active .h-panel > footer {
 }
 html.h-scroll-active .h-panel section,
 html.h-scroll-active .h-panel footer { border-top: none; }
+/* Hero and contact are forced static in script.js (no reveal-scroll
+   slot) — trim their padding here too so real content comfortably
+   fits one screen instead of relying on that clip as a fallback. */
+html.h-scroll-active #hero { padding-top: 64px; padding-bottom: 48px; }
+html.h-scroll-active #hero .hero-frame { padding: 24px 28px; }
+html.h-scroll-active #hero h1 { font-size: clamp(40px, 7vw, 84px); }
+html.h-scroll-active footer#contact { padding-top: 64px; padding-bottom: 40px; }
 
 /* ---------- NAV ---------- */
 header {
