@@ -138,10 +138,6 @@ html.h-scroll-active .h-panel > footer {
 }
 html.h-scroll-active .h-panel section,
 html.h-scroll-active .h-panel footer { border-top: none; }
-/* Filmography needs its grid to fit in one screen's worth of height
-   here, so it gets less top/bottom breathing room than other panels. */
-html.h-scroll-active #filmography { padding-top: 64px; padding-bottom: 48px; }
-html.h-scroll-active #filmography h2 { margin-bottom: 16px; }
 
 /* ---------- NAV ---------- */
 header {
@@ -265,43 +261,47 @@ section { max-width: var(--max-width); margin: 0 auto; padding: 96px 24px; borde
 h2 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 36px; letter-spacing: -0.02em; margin-bottom: 22px; }
 .about-text { color: var(--muted); font-size: 16px; max-width: 62ch; }
 
-/* ---------- REEL CARDS ---------- */
-/* Square grid instead of a stacked list of long bars, so the whole
-   panel's content fits in one screen — no internal vertical scroll
-   needed inside the horizontal-scroll "Titles" panel. */
-.reel-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+/* ---------- REEL CARDS: horizontal filmstrip ---------- */
+/* A single row of full-size, full-content cards you drag/scroll
+   through sideways — like an actual film reel — instead of a grid
+   forced to squeeze everything into a fixed square. This keeps the
+   panel itself short (no internal vertical scroll needed) while
+   every card stays large enough to show its whole description and
+   tag list. Wheel/drag handling for it lives in script.js. */
+.reel-strip {
+  display: flex; align-items: stretch; gap: 18px;
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  padding: 4px 4px 16px;
+  margin: 0 -4px;
+  cursor: grab;
+  scrollbar-width: thin; scrollbar-color: var(--accent) transparent;
+  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
 }
-@media (min-width: 700px) {
-  .reel-grid { grid-template-columns: repeat(4, 1fr); }
-}
+.reel-strip.dragging { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+.reel-strip::-webkit-scrollbar { height: 6px; }
+.reel-strip::-webkit-scrollbar-track { background: transparent; }
+.reel-strip::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+.strip-hint { display: block; color: var(--muted-2); margin-top: 4px; }
+
 .reel {
-  aspect-ratio: 1 / 1;
+  flex: 0 0 300px; width: 300px; scroll-snap-align: start;
   background: var(--panel); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 18px;
+  border-radius: var(--radius); padding: 26px 28px;
   display: flex; flex-direction: column;
-  overflow: hidden;
   transition: border-color 0.2s ease;
 }
 .reel.placeholder { opacity: 0.55; justify-content: center; text-align: center; }
-.reel-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.reel-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
 .reel-num { color: var(--ink); }
-.timecode { display: none; }
-.reel h3 {
-  font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.01em; color: var(--ink);
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.reel p {
-  color: var(--muted); font-size: 12.5px; line-height: 1.5;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-}
-.reel p.tbd { font-style: italic; color: var(--muted-2); -webkit-line-clamp: 2; }
-.tags { display: flex; gap: 5px; margin-top: auto; padding-top: 10px; flex-wrap: wrap; max-height: 46px; overflow: hidden; }
+.timecode { color: var(--muted-2); }
+.reel h3 { font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: var(--ink); }
+.reel p { color: var(--muted); font-size: 15px; }
+.reel p.tbd { font-style: italic; color: var(--muted-2); }
+.tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
 .tags span {
-  font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.04em; color: var(--muted);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 2px 6px;
+  font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 3px 8px;
 }
 
 /* ---------- CREDITS / FOOTER ---------- */

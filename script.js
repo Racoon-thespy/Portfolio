@@ -229,3 +229,43 @@ if (scrubberLabels.length && trackedSections.length) {
   );
   trackedSections.forEach((section) => sectionObserver.observe(section));
 }
+
+// ============================================================
+// REEL FILMSTRIP — drag-to-scroll + vertical-wheel redirect
+// ------------------------------------------------------------
+// The strip only overflows horizontally, so a mouse wheel (unlike a
+// trackpad's two-finger swipe) won't move it on its own. Redirect
+// vertical wheel delta into horizontal scroll while hovering it, but
+// only mid-strip — at either end, let the event through unmodified
+// so the page's own scroll (and the horizontal-panel track above)
+// keeps working exactly as it would without the strip.
+// ============================================================
+document.querySelectorAll('.reel-strip').forEach((strip) => {
+  strip.addEventListener('wheel', (e) => {
+    const atStart = strip.scrollLeft <= 0;
+    const atEnd = strip.scrollLeft >= strip.scrollWidth - strip.clientWidth - 1;
+    const scrollingForward = e.deltaY > 0;
+    if ((scrollingForward && atEnd) || (!scrollingForward && atStart)) return;
+    e.preventDefault();
+    strip.scrollLeft += e.deltaY;
+  }, { passive: false });
+
+  let dragging = false;
+  let startX = 0;
+  let startScroll = 0;
+  strip.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    dragging = true;
+    startX = e.clientX;
+    startScroll = strip.scrollLeft;
+    strip.classList.add('dragging');
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    strip.scrollLeft = startScroll - (e.clientX - startX);
+  });
+  window.addEventListener('pointerup', () => {
+    dragging = false;
+    strip.classList.remove('dragging');
+  });
+});
