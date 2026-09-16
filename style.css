@@ -138,6 +138,10 @@ html.h-scroll-active .h-panel > footer {
 }
 html.h-scroll-active .h-panel section,
 html.h-scroll-active .h-panel footer { border-top: none; }
+/* Filmography needs its grid to fit in one screen's worth of height
+   here, so it gets less top/bottom breathing room than other panels. */
+html.h-scroll-active #filmography { padding-top: 64px; padding-bottom: 48px; }
+html.h-scroll-active #filmography h2 { margin-bottom: 16px; }
 
 /* ---------- NAV ---------- */
 header {
@@ -262,22 +266,42 @@ h2 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 36px; lett
 .about-text { color: var(--muted); font-size: 16px; max-width: 62ch; }
 
 /* ---------- REEL CARDS ---------- */
+/* Square grid instead of a stacked list of long bars, so the whole
+   panel's content fits in one screen — no internal vertical scroll
+   needed inside the horizontal-scroll "Titles" panel. */
+.reel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (min-width: 700px) {
+  .reel-grid { grid-template-columns: repeat(4, 1fr); }
+}
 .reel {
+  aspect-ratio: 1 / 1;
   background: var(--panel); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 26px 28px; margin-bottom: 18px;
+  border-radius: var(--radius); padding: 18px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
   transition: border-color 0.2s ease;
 }
-.reel.placeholder { opacity: 0.55; }
-.reel-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+.reel.placeholder { opacity: 0.55; justify-content: center; text-align: center; }
+.reel-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
 .reel-num { color: var(--ink); }
-.timecode { color: var(--muted-2); }
-.reel h3 { font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: var(--ink); }
-.reel p { color: var(--muted); font-size: 15px; max-width: 64ch; }
-.reel p.tbd { font-style: italic; color: var(--muted-2); }
-.tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.timecode { display: none; }
+.reel h3 {
+  font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.01em; color: var(--ink);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.reel p {
+  color: var(--muted); font-size: 12.5px; line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.reel p.tbd { font-style: italic; color: var(--muted-2); -webkit-line-clamp: 2; }
+.tags { display: flex; gap: 5px; margin-top: auto; padding-top: 10px; flex-wrap: wrap; max-height: 46px; overflow: hidden; }
 .tags span {
-  font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--muted);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 3px 8px;
+  font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.04em; color: var(--muted);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 2px 6px;
 }
 
 /* ---------- CREDITS / FOOTER ---------- */
