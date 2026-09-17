@@ -19,6 +19,7 @@
   --radius:      6px;
   --max-width:   900px;
   --scrub-h:     72px;
+  --header-h:    64px; /* overwritten by script.js with the header's real height */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -124,9 +125,24 @@ body {
    is what renders.
    ============================================================ */
 /* Height is set inline by JS (measure()) once it knows how much extra
-   scroll each panel's own content needs — see script.js. */
+   scroll each panel's own content needs — see script.js.
+
+   The header sits before .h-scroll in normal flow, so .h-scroll's own
+   top is `--header-h` below the document's top — meaning the sticky
+   stage only *engages* after that much has already scrolled by
+   natively (and, symmetrically, *releases* and slides away once
+   scrolled past the stage's own height, before hitting the page's
+   real bottom). Both showed up as a bit of unwanted vertical drift on
+   the hero and contact panels. Pulling .h-scroll up by --header-h
+   (with .h-stage padded back down by the same amount so content still
+   clears the header) makes the stage lock in at scrollY 0, and
+   dropping the page's own bottom padding here means the document ends
+   exactly where the stage's pinned region ends — no slack to release into. */
+html.h-scroll-active .h-scroll { margin-top: calc(-1 * var(--header-h)); }
+html.h-scroll-active body { padding-bottom: 0; }
 html.h-scroll-active .h-stage {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
+  padding-top: var(--header-h);
 }
 html.h-scroll-active .h-track {
   display: flex; width: max-content; min-width: 100%; height: 100%;

@@ -56,6 +56,7 @@ navToggle.addEventListener('click', () => {
 // Disabled on narrow/short viewports and under reduced-motion,
 // where the normal vertical stack (plain CSS, no JS) takes over.
 // ============================================================
+const header = document.querySelector('header');
 const hScroll = document.querySelector('.h-scroll');
 const hStage = document.querySelector('.h-stage');
 const hTrack = document.querySelector('.h-track');
@@ -99,6 +100,11 @@ const metrics = {
 
 function measure() {
   if (!hScroll || !hStage || !hTrack) return;
+  // Read the header's real height into --header-h before measuring
+  // anything else — .h-scroll's own top offset (below) depends on it.
+  if (header) {
+    document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+  }
   metrics.scrollStartY = hScroll.getBoundingClientRect().top + window.scrollY;
   metrics.vh = hStage.offsetHeight;
   metrics.stageWidth = hStage.offsetWidth;
