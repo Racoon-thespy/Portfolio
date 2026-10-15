@@ -333,27 +333,6 @@ html.h-scroll-active .reel-strip { overflow: hidden; }
   border: 1px solid var(--line); border-radius: var(--radius); padding: 3px 8px;
 }
 
-/* Corner badges: sit inside the viewfinder's 12px inset, reuse --vf-color
-   (already flipped to --accent by .viewfinder:hover/:focus-within) so they
-   brighten with the bracket highlight for free — no separate hover rule. */
-.reel-head { padding-right: 34px; }
-.reel-badge {
-  position: absolute; top: 16px; right: 16px;
-  width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--vf-color); border-radius: 50%;
-  color: var(--vf-color); background: var(--panel);
-  transition: border-color 0.2s ease, color 0.2s ease;
-}
-.reel-badge svg { width: 14px; height: 14px; }
-.reel-badge--dev { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; }
-.badge-dot {
-  position: absolute; top: -2px; right: -2px;
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent);
-  animation: recPulse 2.4s ease-in-out infinite;
-}
-
 /* ---------- CREDITS / FOOTER ---------- */
 footer { max-width: var(--max-width); margin: 0 auto; padding: 90px 24px 60px; border-top: 1px solid var(--line); text-align: center; }
 .credits-row { display: flex; justify-content: center; gap: 24px; margin: 22px 0 30px; flex-wrap: wrap; }
