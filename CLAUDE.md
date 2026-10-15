@@ -36,7 +36,7 @@ edits) or replaces it with a fresh build, so hand edits are lost.
   Variables (all optional; defaults in brackets): `--va-accent` (#e5342b), `--va-accent-2` (#f5473a),
   `--va-bg` (#050506), `--va-panel` (#0c0c0f), `--va-ink` (#f4f4f1), `--va-muted` (#8b8b93),
   `--va-muted-2` (#5c5c63), `--va-line` (rgba(255,255,255,.1)), `--va-line-strong` (rgba(255,255,255,.2)),
-  `--va-radius` (6px), `--va-font` (Inter), `--va-font-mono` (Space Mono), `--va-font-size` (14px),
+  `--va-radius` (6px), `--va-font` (Inter), `--va-font-mono` (Space Mono), `--va-font-size` (15px),
   `--va-right` (20px), `--va-bottom` (92px), `--va-z-index` (45), `--va-width` (380px), `--va-height` (520px),
   `--va-inset-mobile` (16px). The page's CSS cannot reach anything else inside the widget.
 - **Change the layout or behaviour** (elements, text, logic): that is source in voice-agent
