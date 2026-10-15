@@ -289,42 +289,28 @@ section { max-width: var(--max-width); margin: 0 auto; padding: 96px 24px; borde
 h2 { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 36px; letter-spacing: -0.02em; margin-bottom: 22px; }
 .about-text { color: var(--muted); font-size: 16px; max-width: 62ch; }
 
-/* ---------- REEL CARDS: horizontal filmstrip ---------- */
-/* A single row of full-size, full-content cards you drag/scroll
-   through sideways — like an actual film reel — instead of a grid
-   forced to squeeze everything into a fixed square. This keeps the
-   panel itself short (no internal vertical scroll needed) while
-   every card stays large enough to show its whole description and
-   tag list. Wheel/drag handling for it lives in script.js. */
-.reel-strip {
-  overflow-x: auto; overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x proximity;
-  padding: 4px 4px 16px;
-  margin: 0 -4px;
-  mask-image: linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent);
-}
-/* In the horizontal-scroll experience the strip is driven by the page
-   scroll itself (see script.js tick()) via a transform on .reel-track,
-   not by native scrolling — so it can't also be natively draggable or
-   wheel-scrollable there. Outside that mode (mobile/reduced-motion/
-   narrow viewports) it falls back to plain touch-swipe scrolling. */
-html.h-scroll-active .reel-strip { overflow: hidden; }
-.reel-track { display: flex; align-items: stretch; gap: 18px; width: max-content; }
-.strip-hint { display: block; color: var(--muted-2); margin-top: 4px; }
+/* ---------- REEL CARDS: static row ---------- */
+/* Three cards laid out side by side, no scrolling. Because the track
+   never overflows the strip, script.js measures zero reveal distance
+   for this panel and it stays put. Stacks to one column on narrow
+   screens. */
+.reel-strip { padding: 4px 0 16px; }
+.reel-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: stretch; }
 
 .reel {
-  flex: 0 0 300px; width: 300px; scroll-snap-align: start;
   background: var(--panel); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 26px 28px;
+  border-radius: var(--radius); padding: 26px 28px 34px;
   display: flex; flex-direction: column;
   transition: border-color 0.2s ease;
+}
+@media (max-width: 700px) {
+  .reel-track { grid-template-columns: 1fr; }
 }
 .reel.placeholder { opacity: 0.55; justify-content: center; text-align: center; }
 .reel-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
 .reel-num { color: var(--ink); }
 .timecode { color: var(--muted-2); }
-.reel h3 { font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: var(--ink); }
+.reel h3 { flex-basis: 100%; font-family: 'Archivo', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; color: var(--ink); }
 .reel p { color: var(--muted); font-size: 15px; }
 .reel p.tbd { font-style: italic; color: var(--muted-2); }
 .tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
